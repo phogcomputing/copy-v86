@@ -9,7 +9,7 @@ IMAGE_NAME=i386/phog-computer-debian
 
 if [ "$1" = "" ]; then
   #docker build . --rm --tag "$IMAGE_NAME"
-  DOCKER_BUILDKIT=0 docker build --progress=plain . --tag "$IMAGE_NAME"
+  DOCKER_BUILDKIT=0 docker build --platform linux/i386 --progress=plain . --tag "$IMAGE_NAME"
   docker rm "$CONTAINER_NAME" || true
   docker create -t -i --name "$CONTAINER_NAME" "$IMAGE_NAME" bash
 else

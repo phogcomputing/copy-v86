@@ -9,16 +9,16 @@ window.onload = function()
 {
 
     var emulator = new V86Starter({
-        wasm_path: "build/v86.wasm",
+        wasm_path: "../build/v86.wasm",
 
         // Uncomment to see what's going on
         screen_container: document.getElementById("screen_container"),
         bios: {
-            url: "bios/seabios.bin",
+            url: "../bios/seabios.bin",
         },
         vga_bios: {
             // feb 4 2023 url: "bios/bochs-vgabios.bin",
-            url: "bios/vgabios.bin",
+            url: "../bios/vgabios.bin",
         },
         autostart: true,
         //disable_keyboard: true,
@@ -33,9 +33,9 @@ window.onload = function()
         //},
         filesystem: {
             basefs: {
-             url: "images/debian-base-fs.json",
+             url: "../images/debian-base-fs.json",
             },
-            baseurl: "images/debian-9p-rootfs-flat/",
+            baseurl: "../images/debian-9p-rootfs-flat/",
         },
         //screen_dummy: true,
     });
@@ -82,12 +82,12 @@ window.onload = function()
 };
 </script>
 
-<textarea readonly rows=25 cols=60 id="log">Waiting for boot ...
+<textarea style="display: none;" readonly rows=25 cols=60 id="log">Waiting for boot ...
 </textarea>
 
-<textarea readonly rows=25 cols=60 id="terminal"></textarea>
+<textarea style="display: none;" readonly rows=25 cols=60 id="terminal"></textarea>
 
-<div id="screen_container">
+<div id="screen_container" style="width: 1024px;height: 768px;">
     <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
     <canvas style="display: none"></canvas>
 </div>
