@@ -79,6 +79,5 @@ v86/run:
 	  -p 8000:8000 \
 	  builder:alpine-3.14 sh -c "make run; sleep 10000"
 	docker cp $(PWD)/computer/phog.html builder-alpine-3.14:/v86/phog.html && \
-	docker cp $(PWD)/computer/index.html builder-alpine-3.14:/v86/index.html && \
-	docker cp $(PWD)/computer/script.js builder-alpine-3.14:/v86/script.js && echo "open localhost:8000" 
+	docker cp $(PWD)/computer/script.js builder-alpine-3.14:/v86/script.js && echo "open localhost:8000"
 	#docker cp $(PWD)/vendor/github.com/copy/v86/images\:/v86/images 
