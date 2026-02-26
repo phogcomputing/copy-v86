@@ -3,6 +3,7 @@ FROM ubuntu:21.04
 RUN \
         export DEBIAN_FRONTEND=noninteractive && \
 	sed -i -re 's/([a-z]{2}\.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list && \
+	sed -i -re 's|ports\.ubuntu\.com/ubuntu-ports|old-releases.ubuntu.com/ubuntu|g' /etc/apt/sources.list && \
         dpkg --add-architecture i386 && \
         apt-get update -qq && \
         apt-get install -y nodejs nasm gdb unzip p7zip-full openjdk-8-jre wget python python3 qemu-system-x86 git-core build-essential libc6-dev-i386-cross libc6-dev-i386 clang curl time && \

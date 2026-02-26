@@ -2,7 +2,10 @@ FROM i386/debian:buster
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt update && \
+RUN sed -i -re 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list && \
+    sed -i -re 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
+    sed -i '/buster-updates/d' /etc/apt/sources.list && \
+    apt update && \
     apt --yes --no-install-recommends install afterstep \
 	build-essential python3-distutils git \
         xfce4 xfce4-goodies tightvncserver \

@@ -1,5 +1,11 @@
 ID := $(shell id -u)
 GID := $(shell id -g)
+ARCH := $(shell uname -m)
+ifeq ($(ARCH),arm64)
+  DOCKER_PLATFORM := --platform linux/amd64
+else
+  DOCKER_PLATFORM :=
+endif
 
 default: docker/builder docker/runbuilder docker/build phog/computer-debian
 dockerbuild: docker/builder docker/build
@@ -10,12 +16,12 @@ start: v86/run
 docker/builder: 
 	-docker stop builder-alpine-3.14
 	-docker rm server-new
-	cd vendor/github.com/copy/v86/tools/docker/test-image && docker build --no-cache -t builder\:alpine-3.14 .
+	cd vendor/github.com/copy/v86/tools/docker/test-image && docker build $(DOCKER_PLATFORM) --no-cache -t builder\:alpine-3.14 .
 
 docker/runbuilder:
 	-docker stop builder-alpine-3.14
 	-docker rm -f builder-alpine-3.14 || sleep 3
-	docker run -d -w=/v86 --name builder-alpine-3.14 --rm  \
+	docker run $(DOCKER_PLATFORM) -d -w=/v86 --name builder-alpine-3.14 --rm  \
 	  -v "$(PWD)/vendor/github.com/copy/v86:/v86" -v "$(PWD)/computer:/v86/computer" \
 	  -v "$(PWD)/src/browser/main.js:/v86/src/browser/main.js" \
 	  -v "$(PWD)/copy/v86/index.html:/v86/index.html" \
@@ -34,7 +40,7 @@ docker/build:
 	  sh -c "while [ ! -f /v86/done ]; do sleep 1;echo -n .; done; make clean; make all" 
 	echo "************** build v86-fallback **************" && \
 	docker exec -w=/v86 -e \
-          PATH=/root/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin -it \
+          PATH=/root/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
 	  "builder-alpine-3.14" make build/v86-fallback.wasm
 	cd vendor/github.com/copy/v86 && \
 	echo "************** build v86.wasm **************" && \
@@ -66,7 +72,7 @@ v86/state:
           sh -c "while [ ! -f /v86/done ]; do sleep 1;echo -n .; done; computer/build-state.js" 
 
 v86/run:
-	-docker run -d -w=/v86 --name builder-alpine-3.14 --rm  \
+	-docker run $(DOCKER_PLATFORM) -d -w=/v86 --name builder-alpine-3.14 --rm  \
 	  -v "$(PWD)/vendor/github.com/copy/v86:/v86" -v "$(PWD)/computer:/v86/computer" \
 	  -v "$(PWD)/src/browser/main.js:/v86/src/browser/main.js" \
 	  -v "$(PWD)/copy/v86/index.html:/v86/index.html" \
